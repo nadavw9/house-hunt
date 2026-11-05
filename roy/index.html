@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>בתים להשכרה — צפון השרון ועמק חפר</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../app.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>בתים להשכרה — צפון השרון ועמק חפר</h1>
+    <div class="sub">בתי קרקע במושבים וביישובים · 4 חדרים ומעלה · עד 8,500 ש״ח · קודם כל בין כביש 2 לכביש 4</div>
+    <div class="scan" id="scan"><span class="pill">טוען…</span></div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tabList" aria-selected="true">רשימה</button>
+    <button role="tab" id="tabMap" aria-selected="false">מפה</button>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="row">
+    <span id="count"></span>
+    <label>מיון:
+      <select id="sort">
+        <option value="new">החדשות קודם</option>
+        <option value="price">מחיר — מהזול</option>
+        <option value="rooms">חדרים — מהגדול</option>
+      </select>
+    </label>
+  </div>
+
+  <section id="viewList"><div class="list" id="list"></div></section>
+  <section id="viewMap" class="hidden">
+    <div class="mapbox">
+      <svg class="map" id="map" viewBox="0 0 300 470" role="img" aria-label="מפת האזור עם המודעות"></svg>
+      <div class="legend">
+        <span><i style="background:var(--green)"></i>עד 8,500</span>
+        <span><i style="background:var(--gray)"></i>בלי מחיר</span>
+      </div>
+      <div class="mapnote">מפה סכמטית — הנקודה מסמנת את היישוב, לא כתובת מדויקת. הקישו על נקודה.</div>
+    </div>
+    <div id="mapPick" class="list"></div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>
