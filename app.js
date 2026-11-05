@@ -54,7 +54,7 @@
   const GREEN=(window.HOUSES_CONFIG||{}).greenMax||10000, ORANGE=(window.HOUSES_CONFIG||{}).orangeMax||10500;
   const PRIO=new Set(((window.HOUSES_CONFIG||{}).priority||{}).settlements||[]), PRIO_LABEL=((window.HOUSES_CONFIG||{}).priority||{}).label||"";
   const isPrio=l=> PRIO.size>0 && PRIO.has((l.settlement||"").trim());
-  const tier=l=> (l.price==null||l.price==="")?"gray": (l.price<=GREEN?"green":(l.price<=ORANGE?"orange":"over"));
+  const tier=l=> (l.price==null||l.price===""||!(l.price>0))?"gray": (l.price<=GREEN?"green":(l.price<=ORANGE?"orange":"over"));
   const isGone=l=> l.lastSeen && (Date.now()-new Date(l.lastSeen))>7*dayMs;
   const isFresh=l=> !marks[l.id] && l.firstSeen && (Date.now()-new Date(l.firstSeen))<3*dayMs;
 
@@ -66,7 +66,7 @@
     const s=state.sort;
     a.sort((x,y)=>{
       if(PRIO.size){ const d=(isPrio(y)?1:0)-(isPrio(x)?1:0); if(d) return d; }
-      if(s==="price"){ const px=x.price??1e9, py=y.price??1e9; return px-py; }
+      if(s==="price"){ const px=x.price>0?x.price:1e9, py=y.price>0?y.price:1e9; return px-py; }
       if(s==="rooms"){ return (y.rooms||0)-(x.rooms||0); }
       return String(y.firstSeen||"").localeCompare(String(x.firstSeen||""));
     });
