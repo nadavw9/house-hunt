@@ -28,7 +28,8 @@
     "הוד השרון":[32.150,34.890],"אלישמע":[32.165,34.919],"גבעת חן":[32.168,34.876],"גני עם":[32.160,34.913],"עדנים":[32.165,34.930],
     "ירקונה":[32.144,34.925],"נווה ימין":[32.169,34.938],"כפר סבא":[32.178,34.907]
   };
-  const BOX = {latN:32.47, latS:32.12, lngW:34.78, lngE:35.06, w:300, h:470};
+  const MAPC = (window.HOUSES_CONFIG||{}).map || null;
+  const BOX = (MAPC&&MAPC.box) || {latN:32.47, latS:32.12, lngW:34.78, lngE:35.06, w:300, h:470};
 
   let canWrite=true;
   let listings=[], marks={}, scanMeta=null;
@@ -105,6 +106,7 @@
     tags.push(`<span class="tag">${esc(TYPE_LABEL[l.type]||l.typeText||"בית")}</span>`);
     (l.sources||[l.source]).filter(Boolean).forEach(s=>tags.push(`<span class="tag src">${esc(SRC_LABEL[s]||s)}</span>`));
     if(l.broker===false) tags.push(`<span class="tag">פרטי</span>`); else if(l.broker===true) tags.push(`<span class="tag">תיווך</span>`);
+    if(l.price>0 && l.price<4000) tags.push(`<span class="tag gone">מחיר נמוך חשוד — אולי חדר בשותפות</span>`);
     if(t==="orange") tags.push(`<span class="tag" style="background:var(--orange-bg);color:var(--orange)">מעל המועדף</span>`);
     if(isGone(l)) tags.push(`<span class="tag gone">לא נראתה בשבוע האחרון — ייתכן שהוסרה</span>`);
     const btns=STATUSES.map(s=>`<button class="st" data-id="${esc(l.id)}" data-s="${s.k}" aria-pressed="${st===s.k}" ${st===s.k?`style="background:${s.color}"`:""} ${canWrite?"":"disabled"}>${s.label}</button>`).join("");
@@ -153,9 +155,15 @@
     const seaPath=`M0,0 L${cp2.map(p=>p.map(v=>v.toFixed(1)).join(",")).join(" L")} L0,${BOX.h} Z`;
     const towns=[["נתניה",32.321,34.853],["רעננה",32.184,34.871],["כפר סבא",32.178,34.907],["חדרה",32.437,34.919],["כפר יונה",32.316,34.935],["אבן יהודה",32.270,34.888],["קדימה צורן",32.279,34.915],["תל מונד",32.250,34.917],["פרדסיה",32.306,34.909],["הרצליה",32.166,34.843],["הוד השרון",32.150,34.890]];
     let h=`<rect x="0" y="0" width="${BOX.w}" height="${BOX.h}" fill="#eef3e6"/>`;
+    if(MAPC){
+      if(MAPC.polygon){ const pp=MAPC.polygon.map(c=>P(c[0],c[1]).map(v=>v.toFixed(1)).join(",")).join(" "); h+=`<polygon points="${pp}" fill="#dcefd9" stroke="#3aa655" stroke-width="2.5" stroke-linejoin="round"/>`; }
+      (MAPC.lines||[]).forEach(l=>{ const pts=l.points.map(c=>P(c[0],c[1]).map(v=>v.toFixed(1)).join(",")).join(" "); h+=`<polyline points="${pts}" fill="none" stroke="#b9bfba" stroke-width="5" stroke-linecap="round"/>`; if(l.label){ const [lx,ly]=P(l.label[1],l.label[2]); h+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" font-size="10" fill="#7d857f" text-anchor="middle">${l.label[0]}</text>`; } });
+      (MAPC.landmarks||[]).forEach(([n,la,ln])=>{ const [x,y]=P(la,ln); h+=`<rect x="${(x-3).toFixed(1)}" y="${(y-3).toFixed(1)}" width="6" height="6" fill="#9aa39e"/><text x="${x.toFixed(1)}" y="${(y+15).toFixed(1)}" font-size="10.5" fill="#5f6964" text-anchor="middle">${n}</text>`; });
+    } else {
     h+=`<path d="${seaPath}" fill="#cfe3ef"/>`;
     h+=`<text x="14" y="${BOX.h/2}" fill="#7aa3bd" font-size="12" font-weight="700" transform="rotate(-78 14 ${BOX.h/2})">הים התיכון</text>`;
     towns.forEach(([n,la,ln])=>{ const [x,y]=P(la,ln); h+=`<rect x="${(x-3).toFixed(1)}" y="${(y-3).toFixed(1)}" width="6" height="6" fill="#9aa39e"/><text x="${x.toFixed(1)}" y="${(y+15).toFixed(1)}" font-size="10.5" fill="#5f6964" text-anchor="middle">${n}</text>`; });
+    }
     const a=visible().map(l=>({l,c:coordOf(l)})).filter(o=>o.c);
     // spread dots that share a spot
     const seen={};

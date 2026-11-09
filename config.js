@@ -1,4 +1,15 @@
-// Firebase Realtime Database URL
+// Board for Magen & Gali — Herzliya area
 window.HOUSES_CONFIG = {
-  firebaseUrl: "https://house-hunt-617d3-default-rtdb.europe-west1.firebasedatabase.app"
+  firebaseUrl: "https://house-hunt-617d3-default-rtdb.europe-west1.firebasedatabase.app",
+  root: "/houses",
+  greenMax: 10000,
+  orangeMax: 10500,
+  map: {
+    box: {latN:32.1810, latS:32.1550, lngW:34.8140, lngE:34.8420, w:300, h:330},
+    polygon: [[32.1780,34.8270],[32.1777,34.8313],[32.1765,34.8363],[32.1750,34.8375],[32.1713,34.8374],[32.1676,34.8367],[32.1650,34.8355],[32.1628,34.8342],[32.1603,34.8332],[32.1588,34.8293],[32.1601,34.8239],[32.1622,34.8206],[32.1666,34.8178]],
+    lines: [
+      {points:[[32.1810,34.8297],[32.1780,34.8264],[32.1666,34.8171],[32.1550,34.8138]], label:["כביש 20",32.1575,34.8185]}
+    ],
+    landmarks: [["רכבת",32.1642,34.8188],["פארק הרצליה",32.1690,34.8226],["רייכמן",32.1763,34.8371],["שבעת הכוכבים",32.1655,34.8262]]
+  }
 };
