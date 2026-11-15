@@ -102,6 +102,7 @@
     if(l.entry) facts.push(`<span>📅 כניסה: ${esc(l.entry)}</span>`);
     const tags=[];
     if(isFresh(l)) tags.push(`<span class="tag new">חדש</span>`);
+    (l.features||[]).forEach(f=>tags.push(`<span class="tag" style="background:#e3efe7;color:#2f6b4f">✓ ${esc(f)}</span>`));
     if(isPrio(l)) tags.push(`<span class="tag prio">${esc(PRIO_LABEL)}</span>`);
     tags.push(`<span class="tag">${esc(TYPE_LABEL[l.type]||l.typeText||"בית")}</span>`);
     (l.sources||[l.source]).filter(Boolean).forEach(s=>tags.push(`<span class="tag src">${esc(SRC_LABEL[s]||s)}</span>`));
